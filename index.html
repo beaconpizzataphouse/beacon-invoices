@@ -253,10 +253,14 @@ function openInvoice(idx) {
       ')</span><span>' + money(i.it) + '</span></div>';
     if (i.dl != null)
       breakdown += '<div class="kv"><span>Delivery</span><span>' + money(i.dl) + '</span></div>';
+    if (i.ot)
+      breakdown += '<div class="kv"><span>' + esc(i.otd || 'Other') +
+        '</span><span>' + money(i.ot) + '</span></div>';
     if (i.tx)
       breakdown += '<div class="kv"><span>Taxes</span><span>' + money(i.tx) + '</span></div>';
     if (i.cr)
-      breakdown += '<div class="kv"><span>Credit</span><span>-' + money(i.cr).slice(1) + '</span></div>';
+      breakdown += '<div class="kv"><span>Credit</span><span>' +
+        money(-Math.abs(i.cr)) + '</span></div>';
   }
   $('inv-detail').innerHTML =
     '<h2>' + esc(i.v) + '</h2>' +
