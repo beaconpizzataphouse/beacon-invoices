@@ -16,11 +16,6 @@
   header img { width: 92px; height: 92px; border-radius: 50%; }
   header h1 { font-size: 26px; margin-top: 6px; }
   header p { color: #6f655c; font-size: 14px; margin-top: 2px; }
-  .summary {
-    background: #fff; border: 1px solid #e8e0d5; border-radius: 12px;
-    padding: 12px 16px; margin: 12px 0; font-size: 15px; text-align: center;
-  }
-  .summary b { font-size: 17px; }
   .tabs { display: flex; gap: 8px; position: sticky; top: 0; z-index: 10;
     background: #faf7f2; padding: 10px 0; }
   .tabs button {
@@ -98,8 +93,6 @@
     <p>Invoices &amp; prices, minus the spreadsheet.</p>
   </header>
 
-  <div class="summary" id="summary">Loading&hellip;</div>
-
   <div class="tabs" id="tabs">
     <button id="tab-invoices" class="active" onclick="showTab('invoices')">Invoices</button>
     <button id="tab-items" onclick="showTab('items')">Items</button>
@@ -157,8 +150,6 @@ let currentTab = 'invoices';
 const $ = id => document.getElementById(id);
 const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US',
   {minimumFractionDigits: 2, maximumFractionDigits: 2});
-const money0 = n => '$' + n.toLocaleString('en-US',
-  {minimumFractionDigits: 2, maximumFractionDigits: 2});
 const fmtDate = iso => {
   if (!iso) return '';
   const [y, m, d] = iso.split('-').map(Number);
@@ -175,17 +166,14 @@ Promise.all([
   INVOICES = invData.invoices;
   ITEMS = itemData.items;
   META = {invoices: invData, items: itemData};
-  $('summary').innerHTML =
-    '<b>' + invData.count + ' invoices</b> &middot; <b>' +
-    money0(invData.total) + '</b> all time<br>' +
-    '<span style="color:#6f655c">Oct 2024 &ndash; Nov 2026 &middot; ' +
-    itemData.count + ' items tracked</span>';
   $('footer').textContent = 'Data through Nov 15, 2026. New invoices show up here after Dude enters them.';
   buildVendorChips();
   renderInvoices();
   renderItems();
 }).catch(() => {
-  $('summary').textContent = 'Couldn\u2019t load the invoice data. Check your connection and try again.';
+  const e = $('inv-empty');
+  e.textContent = 'Couldn\u2019t load the invoice data. Check your connection and try again.';
+  e.classList.remove('hidden');
 });
 
 function showTab(tab) {
@@ -242,9 +230,11 @@ function filteredInvoices() {
 
 function renderInvoices() {
   const list = filteredInvoices();
-  $('inv-count').innerHTML = list.length + ' invoice' +
-    (list.length === 1 ? '' : 's') +
-    (list.length ? ' &middot; ' + money0(list.reduce((s, i) => s + i.t, 0)) : '');
+  // No totals shown: employees may see this app. Only a match count, and
+  // only while a search or vendor filter is active.
+  const filtering = $('inv-search').value.trim() || vendorFilter !== 'All';
+  $('inv-count').innerHTML = filtering
+    ? list.length + ' invoice' + (list.length === 1 ? '' : 's') : '';
   $('inv-empty').classList.toggle('hidden', list.length > 0);
   $('inv-list').innerHTML = list.map(i => {
     const idx = INVOICES.indexOf(i);
