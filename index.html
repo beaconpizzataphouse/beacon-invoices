@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Beacon Invoices</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #faf7f2; color: #221c18; line-height: 1.45;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px 40px; }
+  header { text-align: center; padding: 20px 0 8px; }
+  header img { width: 92px; height: 92px; border-radius: 50%; }
+  header h1 { font-size: 26px; margin-top: 6px; }
+  header p { color: #6f655c; font-size: 14px; margin-top: 2px; }
+  .summary {
+    background: #fff; border: 1px solid #e8e0d5; border-radius: 12px;
+    padding: 12px 16px; margin: 12px 0; font-size: 15px; text-align: center;
+  }
+  .summary b { font-size: 17px; }
+  .tabs { display: flex; gap: 8px; position: sticky; top: 0; z-index: 10;
+    background: #faf7f2; padding: 10px 0; }
+  .tabs button {
+    flex: 1; padding: 13px; font-size: 17px; font-weight: 700;
+    border: 2px solid #b2222c; border-radius: 12px; background: #fff;
+    color: #b2222c; cursor: pointer;
+  }
+  .tabs button.active { background: #b2222c; color: #fff; }
+  .search {
+    width: 100%; padding: 13px 14px; font-size: 17px; border: 2px solid #ddd2c2;
+    border-radius: 12px; background: #fff; margin: 4px 0 12px;
+  }
+  .search:focus { outline: none; border-color: #b2222c; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch; }
+  .chips button {
+    flex: 0 0 auto; padding: 9px 14px; font-size: 15px; font-weight: 600;
+    border: 1px solid #ddd2c2; border-radius: 999px; background: #fff;
+    color: #221c18; cursor: pointer;
+  }
+  .chips button.active { background: #221c18; color: #fff; border-color: #221c18; }
+  .list { list-style: none; }
+  .list li {
+    background: #fff; border: 1px solid #e8e0d5; border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 8px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  }
+  .list li:active { background: #f3ede3; }
+  .row-main { min-width: 0; }
+  .row-title { font-size: 17px; font-weight: 700; }
+  .row-sub { font-size: 14px; color: #6f655c; margin-top: 2px; }
+  .row-amt { font-size: 17px; font-weight: 700; white-space: nowrap; }
+  .row-amt.neg { color: #b2222c; }
+  .count-line { color: #6f655c; font-size: 14px; margin: 4px 0 10px; }
+  .detail-card {
+    background: #fff; border: 1px solid #e8e0d5; border-radius: 12px;
+    padding: 20px; margin-bottom: 12px;
+  }
+  .detail-card h2 { font-size: 22px; margin-bottom: 4px; }
+  .detail-card .big { font-size: 38px; font-weight: 800; margin: 8px 0; }
+  .detail-card .big.neg { color: #b2222c; }
+  .kv { display: flex; justify-content: space-between; padding: 8px 0;
+    border-top: 1px solid #f0e9dd; font-size: 16px; }
+  .kv:first-of-type { border-top: none; }
+  .kv span:first-child { color: #6f655c; }
+  .kv span:last-child { font-weight: 600; text-align: right; }
+  .note { color: #6f655c; font-size: 15px; }
+  .back {
+    display: inline-block; margin: 12px 0; font-size: 17px; font-weight: 700;
+    color: #b2222c; background: none; border: none; cursor: pointer; padding: 6px 0;
+  }
+  .chart { display: flex; align-items: flex-end; gap: 4px; height: 150px;
+    padding: 18px 4px 0; margin: 8px 0 4px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-end; height: 100%; min-width: 0; }
+  .bar-val { font-size: 10px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; }
+  .bar { width: 100%; max-width: 26px; background: #b2222c; border-radius: 4px 4px 0 0; min-height: 4px; }
+  .bar-col.latest .bar { background: #221c18; }
+  .bar-lab { font-size: 10px; color: #6f655c; margin-top: 5px; white-space: nowrap; }
+  table.hist { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 8px; }
+  table.hist th, table.hist td { padding: 9px 6px; text-align: right; border-top: 1px solid #f0e9dd; }
+  table.hist th:first-child, table.hist td:first-child { text-align: left; }
+  table.hist th { color: #6f655c; font-weight: 600; font-size: 13px; }
+  .section-title { font-size: 18px; font-weight: 700; margin: 18px 0 6px; }
+  .empty { text-align: center; color: #6f655c; padding: 32px 16px; font-size: 16px; }
+  footer { text-align: center; color: #9a8f83; font-size: 13px; margin-top: 28px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="logo.png" alt="Beacon Pizza logo">
+    <h1>Beacon Invoices</h1>
+    <p>Invoices &amp; prices, minus the spreadsheet.</p>
+  </header>
+
+  <div class="summary" id="summary">Loading&hellip;</div>
+
+  <div class="tabs" id="tabs">
+    <button id="tab-invoices" class="active" onclick="showTab('invoices')">Invoices</button>
+    <button id="tab-items" onclick="showTab('items')">Items</button>
+  </div>
+
+  <!-- Invoices list -->
+  <div id="view-invoices">
+    <input class="search" id="inv-search" type="search" placeholder="Search vendor or invoice #"
+      oninput="renderInvoices()">
+    <div class="chips" id="vendor-chips"></div>
+    <div class="count-line" id="inv-count"></div>
+    <ul class="list" id="inv-list"></ul>
+    <div class="empty hidden" id="inv-empty">No invoices match that search.</div>
+  </div>
+
+  <!-- Items list -->
+  <div id="view-items" class="hidden">
+    <input class="search" id="item-search" type="search" placeholder="Search items, like pepperoni"
+      oninput="renderItems()">
+    <div class="count-line" id="item-count"></div>
+    <ul class="list" id="item-list"></ul>
+    <div class="empty hidden" id="item-empty">No items match that search.</div>
+  </div>
+
+  <!-- Invoice detail -->
+  <div id="view-invoice-detail" class="hidden">
+    <button class="back" onclick="backToList()">&#8592; All invoices</button>
+    <div class="detail-card" id="inv-detail"></div>
+    <div class="detail-card">
+      <div class="section-title" style="margin-top:0">What&rsquo;s on it</div>
+      <p class="note" id="inv-lines-note"></p>
+      <div id="inv-lines"></div>
+    </div>
+  </div>
+
+  <!-- Item detail -->
+  <div id="view-item-detail" class="hidden">
+    <button class="back" onclick="backToList()">&#8592; All items</button>
+    <div class="detail-card" id="item-detail"></div>
+    <div class="detail-card" id="item-history-card">
+      <div class="section-title" style="margin-top:0">What we&rsquo;ve paid</div>
+      <div id="item-chart"></div>
+      <div id="item-history"></div>
+    </div>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+let INVOICES = [], ITEMS = [], META = {};
+let vendorFilter = 'All';
+let currentTab = 'invoices';
+
+const $ = id => document.getElementById(id);
+const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US',
+  {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const money0 = n => '$' + n.toLocaleString('en-US',
+  {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const fmtDate = iso => {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US',
+    {month: 'short', day: 'numeric', year: 'numeric'});
+};
+const esc = s => String(s).replace(/[&<>"]/g,
+  c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+
+Promise.all([
+  fetch('invoices.json').then(r => r.json()),
+  fetch('items.json').then(r => r.json())
+]).then(([invData, itemData]) => {
+  INVOICES = invData.invoices;
+  ITEMS = itemData.items;
+  META = {invoices: invData, items: itemData};
+  $('summary').innerHTML =
+    '<b>' + invData.count + ' invoices</b> &middot; <b>' +
+    money0(invData.total) + '</b> all time<br>' +
+    '<span style="color:#6f655c">Oct 2024 &ndash; Nov 2026 &middot; ' +
+    itemData.count + ' items tracked</span>';
+  $('footer').textContent = 'Data through Nov 15, 2026. New invoices show up here after Dude enters them.';
+  buildVendorChips();
+  renderInvoices();
+  renderItems();
+}).catch(() => {
+  $('summary').textContent = 'Couldn\u2019t load the invoice data. Check your connection and try again.';
+});
+
+function showTab(tab) {
+  currentTab = tab;
+  $('tab-invoices').classList.toggle('active', tab === 'invoices');
+  $('tab-items').classList.toggle('active', tab === 'items');
+  $('view-invoices').classList.toggle('hidden', tab !== 'invoices');
+  $('view-items').classList.toggle('hidden', tab !== 'items');
+  $('view-invoice-detail').classList.add('hidden');
+  $('view-item-detail').classList.add('hidden');
+  $('tabs').classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+function backToList() { showTab(currentTab); }
+
+function showDetail(which) {
+  $('view-invoices').classList.add('hidden');
+  $('view-items').classList.add('hidden');
+  $('tabs').classList.add('hidden');
+  $('view-invoice-detail').classList.toggle('hidden', which !== 'invoice');
+  $('view-item-detail').classList.toggle('hidden', which !== 'item');
+  window.scrollTo(0, 0);
+}
+
+function buildVendorChips() {
+  const counts = {};
+  INVOICES.forEach(i => { counts[i.v] = (counts[i.v] || 0) + 1; });
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6)
+    .map(e => e[0]);
+  const vendors = ['All'].concat(top);
+  $('vendor-chips').innerHTML = vendors.map(v =>
+    '<button data-v="' + esc(v) + '" class="' + (v === 'All' ? 'active' : '') +
+    '" onclick="setVendor(\'' + esc(v).replace(/'/g, "\\'") + '\')">' +
+    esc(v) + '</button>').join('');
+}
+
+function setVendor(v) {
+  vendorFilter = v;
+  document.querySelectorAll('#vendor-chips button').forEach(b =>
+    b.classList.toggle('active', b.dataset.v === v));
+  renderInvoices();
+}
+
+function filteredInvoices() {
+  const q = $('inv-search').value.trim().toLowerCase();
+  return INVOICES.filter(i => {
+    if (vendorFilter !== 'All' && i.v !== vendorFilter) return false;
+    if (!q) return true;
+    return i.v.toLowerCase().includes(q) || i.n.toLowerCase().includes(q) ||
+      fmtDate(i.d).toLowerCase().includes(q);
+  });
+}
+
+function renderInvoices() {
+  const list = filteredInvoices();
+  $('inv-count').innerHTML = list.length + ' invoice' +
+    (list.length === 1 ? '' : 's') +
+    (list.length ? ' &middot; ' + money0(list.reduce((s, i) => s + i.t, 0)) : '');
+  $('inv-empty').classList.toggle('hidden', list.length > 0);
+  $('inv-list').innerHTML = list.map(i => {
+    const idx = INVOICES.indexOf(i);
+    return '<li onclick="openInvoice(' + idx + ')">' +
+      '<div class="row-main"><div class="row-title">' + esc(i.v) + '</div>' +
+      '<div class="row-sub">' + fmtDate(i.d) + ' &middot; #' + esc(i.n) + '</div></div>' +
+      '<div class="row-amt' + (i.t < 0 ? ' neg' : '') + '">' + money(i.t) + '</div></li>';
+  }).join('');
+}
+
+function openInvoice(idx) {
+  const i = INVOICES[idx];
+  $('inv-detail').innerHTML =
+    '<h2>' + esc(i.v) + '</h2>' +
+    '<div class="row-sub">Invoice #' + esc(i.n) + '</div>' +
+    '<div class="big' + (i.t < 0 ? ' neg' : '') + '">' + money(i.t) + '</div>' +
+    '<div class="kv"><span>Date</span><span>' + fmtDate(i.d) + '</span></div>' +
+    '<div class="kv"><span>Vendor</span><span>' + esc(i.v) + '</span></div>' +
+    '<div class="kv"><span>Invoice #</span><span>' + esc(i.n) + '</span></div>' +
+    '<div class="kv"><span>MarginEdge status</span><span>' + esc(i.s) + '</span></div>';
+  if (i.lines && i.lines.length) {
+    $('inv-lines-note').textContent = '';
+    $('inv-lines').innerHTML = '<table class="hist"><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>' +
+      i.lines.map(l => '<tr><td>' + esc(l.item) + '</td><td>' + esc(l.qty) +
+        '</td><td>' + money(l.price) + '</td><td>' + money(l.total) + '</td></tr>').join('') + '</table>';
+  } else {
+    $('inv-lines-note').textContent =
+      'Line items weren\u2019t in the MarginEdge export \u2014 totals only for older invoices. ' +
+      'New invoices entered from photos will list what\u2019s on them here.';
+    $('inv-lines').innerHTML = '';
+  }
+  currentTab = 'invoices';
+  showDetail('invoice');
+}
+
+function filteredItems() {
+  const q = $('item-search').value.trim().toLowerCase();
+  if (!q) return ITEMS;
+  return ITEMS.filter(i =>
+    i.name.toLowerCase().includes(q) || i.v.toLowerCase().includes(q) ||
+    (i.code && i.code.toLowerCase().includes(q)));
+}
+
+function renderItems() {
+  const list = filteredItems();
+  $('item-count').textContent = list.length + ' item' + (list.length === 1 ? '' : 's');
+  $('item-empty').classList.toggle('hidden', list.length > 0);
+  $('item-list').innerHTML = list.map(it => {
+    const idx = ITEMS.indexOf(it);
+    const price = it.lp != null ? money(it.lp) + (it.unit ? ' / ' + esc(it.unit) : '') : '—';
+    return '<li onclick="openItem(' + idx + ')">' +
+      '<div class="row-main"><div class="row-title">' + esc(it.name) + '</div>' +
+      '<div class="row-sub">' + esc(it.v || 'No vendor') +
+      (it.code ? ' &middot; #' + esc(it.code) : '') + '</div></div>' +
+      '<div class="row-amt">' + price + '</div></li>';
+  }).join('');
+}
+
+function openItem(idx) {
+  const it = ITEMS[idx];
+  const priceLine = it.lp != null
+    ? '<div class="big">' + money(it.lp) + '</div>' +
+      '<div class="row-sub">per ' + esc(it.unit || 'unit') +
+      (it.lm ? ' &middot; last bought ' + esc(it.lm) : '') + '</div>'
+    : '<div class="big">—</div><div class="row-sub">No recent price on file</div>';
+  $('item-detail').innerHTML =
+    '<h2>' + esc(it.name) + '</h2>' +
+    '<div class="row-sub">' + esc(it.v || 'No vendor') + '</div>' +
+    priceLine +
+    '<div class="kv"><span>Vendor</span><span>' + esc(it.v || '—') + '</span></div>' +
+    '<div class="kv"><span>Item code</span><span>' + esc(it.code || '—') + '</span></div>' +
+    '<div class="kv"><span>Category</span><span>' + esc(it.cat || '—') + '</span></div>' +
+    '<div class="kv"><span>Unit</span><span>' + esc(it.unit || '—') + '</span></div>';
+  if (it.h && it.h.length) {
+    const prices = it.h.map(r => r.p).filter(p => p != null);
+    const lo = Math.min(...prices), hi = Math.max(...prices);
+    const span = (hi - lo) || 1;
+    $('item-chart').innerHTML = '<div class="chart">' + it.h.map((r, k) => {
+      const h = r.p == null ? 0 : 8 + ((r.p - lo) / span) * 84;
+      return '<div class="bar-col' + (k === it.h.length - 1 ? ' latest' : '') + '">' +
+        '<div class="bar-val">' + (r.p == null ? '' : '$' + r.p.toFixed(2)) + '</div>' +
+        '<div class="bar" style="height:' + h.toFixed(0) + '%"></div>' +
+        '<div class="bar-lab">' + esc(r.m) + '</div></div>';
+    }).join('') + '</div>' +
+    '<p class="note" style="margin-top:6px">Monthly average price, per ' +
+    esc(it.unit || 'unit') + '. Black bar is the latest month.</p>';
+    $('item-history').innerHTML = '<table class="hist">' +
+      '<tr><th>Month</th><th>Avg price</th><th>Bought</th><th>Spent</th></tr>' +
+      it.h.slice().reverse().map(r =>
+        '<tr><td>' + esc(r.m) + '</td><td>' + (r.p == null ? '—' : money(r.p)) +
+        '</td><td>' + (r.q == null ? '—' : r.q.toLocaleString('en-US')) +
+        '</td><td>' + (r.a == null ? '—' : money(r.a)) + '</td></tr>').join('') + '</table>';
+  } else {
+    $('item-chart').innerHTML = '';
+    $('item-history').innerHTML = '<p class="note">No price history in the last year ' +
+      'for this item. It will build up as new invoices come in.</p>';
+  }
+  currentTab = 'items';
+  showDetail('item');
+}
+</script>
+</body>
+</html>
