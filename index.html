@@ -183,10 +183,12 @@ const monthShort = m => {
   const p = monthParts(m);
   return p ? p[0] + " '" + p[1] : m;
 };
-// History rows carry first/last purchase dates (fd/ld) for the month:
-// one purchase shows its date ("Nov 5, 2026"), several show the span
-// ("Nov 3 – 26, 2026"). Falls back to the month label when no date is on
-// file.
+// History rows carry every purchase date that month (ds): one date shows
+// as "Nov 5, 2026", several as "Jun 4, 11, 25, 2026" -- every day listed,
+// so the count of dates matches the quantity. Falls back to the first/last
+// span (fd/ld), then to the month label, when no dates are on file.
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+  'Oct', 'Nov', 'Dec'];
 const fmtDay = iso => {
   if (!iso) return '';
   const [y, m, d] = iso.split('-').map(Number);
@@ -194,6 +196,11 @@ const fmtDay = iso => {
     {month: 'short', day: 'numeric'});
 };
 const histDate = r => {
+  if (r.ds && r.ds.length) {
+    const mon = MON[Number(r.ds[0].slice(5, 7)) - 1];
+    const days = r.ds.map(d => Number(d.slice(8, 10)));
+    return mon + ' ' + days.join(', ') + ', ' + r.ds[0].slice(0, 4);
+  }
   if (!r.fd) return monthLong(r.m);
   if (!r.ld || r.ld === r.fd) return fmtDate(r.fd);
   return fmtDay(r.fd) + ' – ' + Number(r.ld.slice(8, 10)) + ', ' +
