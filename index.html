@@ -162,6 +162,21 @@ const fmtDate = iso => {
 };
 const esc = s => String(s).replace(/[&<>"]/g,
   c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+// Month labels arrive as "Feb 26" (Feb 2026). Spell the year out in the
+// table so it can't be read as the 26th day of the month; the chart gets
+// "Feb '26", which reads as a year.
+const monthParts = m => {
+  const p = String(m).split(' ');
+  return p.length === 2 ? p : null;
+};
+const monthLong = m => {
+  const p = monthParts(m);
+  return p ? p[0] + ' 20' + p[1] : m;
+};
+const monthShort = m => {
+  const p = monthParts(m);
+  return p ? p[0] + " '" + p[1] : m;
+};
 
 Promise.all([
   fetch('invoices.json').then(r => r.json()),
@@ -365,14 +380,14 @@ function openItem(idx, fromInvoice) {
       return '<div class="bar-col' + (k === it.h.length - 1 ? ' latest' : '') + '">' +
         '<div class="bar-val">' + (r.p == null ? '' : '$' + r.p.toFixed(2)) + '</div>' +
         '<div class="bar" style="height:' + h.toFixed(0) + '%"></div>' +
-        '<div class="bar-lab">' + esc(r.m) + '</div></div>';
+        '<div class="bar-lab">' + esc(monthShort(r.m)) + '</div></div>';
     }).join('') + '</div>' +
     '<p class="note" style="margin-top:6px">Monthly average price, per ' +
     esc(it.unit || 'unit') + '. Black bar is the latest month.</p>';
     $('item-history').innerHTML = '<table class="hist">' +
       '<tr><th>Month</th><th>Avg price</th><th>Bought</th><th>Spent</th></tr>' +
       it.h.slice().reverse().map(r =>
-        '<tr><td>' + esc(r.m) + '</td><td>' + (r.p == null ? '—' : money(r.p)) +
+        '<tr><td>' + esc(monthLong(r.m)) + '</td><td>' + (r.p == null ? '—' : money(r.p)) +
         '</td><td>' + (r.q == null ? '—' : r.q.toLocaleString('en-US')) +
         '</td><td>' + (r.a == null ? '—' : money(r.a)) + '</td></tr>').join('') + '</table>';
   } else {
