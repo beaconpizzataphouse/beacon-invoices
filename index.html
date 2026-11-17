@@ -177,6 +177,22 @@ const monthShort = m => {
   const p = monthParts(m);
   return p ? p[0] + " '" + p[1] : m;
 };
+// History rows carry first/last purchase dates (fd/ld) for the month:
+// one purchase shows its date ("Nov 5, 2026"), several show the span
+// ("Nov 3 – 26, 2026"). Falls back to the month label when no date is on
+// file.
+const fmtDay = iso => {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US',
+    {month: 'short', day: 'numeric'});
+};
+const histDate = r => {
+  if (!r.fd) return monthLong(r.m);
+  if (!r.ld || r.ld === r.fd) return fmtDate(r.fd);
+  return fmtDay(r.fd) + ' – ' + Number(r.ld.slice(8, 10)) + ', ' +
+    r.fd.slice(0, 4);
+};
 
 Promise.all([
   fetch('invoices.json').then(r => r.json()),
@@ -385,9 +401,9 @@ function openItem(idx, fromInvoice) {
     '<p class="note" style="margin-top:6px">Monthly average price, per ' +
     esc(it.unit || 'unit') + '. Black bar is the latest month.</p>';
     $('item-history').innerHTML = '<table class="hist">' +
-      '<tr><th>Month</th><th>Avg price</th><th>Bought</th><th>Spent</th></tr>' +
+      '<tr><th>Date</th><th>Avg price</th><th>Qty</th><th>Spent</th></tr>' +
       it.h.slice().reverse().map(r =>
-        '<tr><td>' + esc(monthLong(r.m)) + '</td><td>' + (r.p == null ? '—' : money(r.p)) +
+        '<tr><td>' + esc(histDate(r)) + '</td><td>' + (r.p == null ? '—' : money(r.p)) +
         '</td><td>' + (r.q == null ? '—' : r.q.toLocaleString('en-US')) +
         '</td><td>' + (r.a == null ? '—' : money(r.a)) + '</td></tr>').join('') + '</table>';
   } else {
