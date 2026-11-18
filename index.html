@@ -327,7 +327,7 @@ function openInvoice(idx) {
     '<div class="kv"><span>Date</span><span>' + fmtDate(i.d) + '</span></div>' +
     '<div class="kv"><span>Vendor</span><span>' + esc(i.v) + '</span></div>' +
     '<div class="kv"><span>Invoice #</span><span>' + esc(i.n) + '</span></div>' +
-    '<div class="kv"><span>MarginEdge status</span><span>' + esc(i.s) + '</span></div>';
+    '<div class="kv"><span>Status</span><span>' + esc(i.s) + '</span></div>';
   if (i.lines && i.lines.length) {
     $('inv-lines-note').textContent =
       'Tap a product to see when we last bought it and what we paid.';
