@@ -218,7 +218,7 @@ Promise.all([
   // one product, e.g. the three pepperonis; their pages are identical).
   ITEM_BY_KEY = {};
   ITEMS.forEach((it, i) => { if (!(it.k in ITEM_BY_KEY)) ITEM_BY_KEY[it.k] = i; });
-  $('footer').textContent = 'Data through Nov 15, 2026. New invoices show up here after Dude enters them.';
+  $('footer').textContent = 'Data through ' + fmtDate(invData.generated) + '. New invoices show up here after Dude enters them.';
   buildVendorChips();
   renderInvoices();
   renderItems();
