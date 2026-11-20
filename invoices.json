@@ -1,6 +1,75 @@
 {
- "generated": "2026-11-19",
+ "generated": "2026-11-20",
  "invoices": [
+  {
+   "d": "2026-11-20",
+   "v": "Sysco",
+   "n": "321530475",
+   "t": 1201.18,
+   "s": "Photo",
+   "it": 1191.18,
+   "tx": 0.0,
+   "dl": 10.0,
+   "cr": 0.0,
+   "lines": [
+    {
+     "item": "Cheese, Mozzarella Provolone Shredded",
+     "qty": "8 x Case/6/5LB",
+     "price": 68.27,
+     "total": 546.16,
+     "k": "Cheese, Mozzarella Provolone Shredded"
+    },
+    {
+     "item": "Pepperoni, Sliced",
+     "qty": "5 x Case/1/10LB",
+     "price": 42.77,
+     "total": 213.85,
+     "k": "Pepperoni, Sliced"
+    },
+    {
+     "item": "Sausage, Pizza Topping",
+     "qty": "5 x Case/2/5LB",
+     "price": 38.35,
+     "total": 191.75,
+     "k": "Sausage, Pizza Topping"
+    },
+    {
+     "item": "Flour, High Gluten",
+     "qty": "10 x Case/1/25LB",
+     "price": 11.09,
+     "total": 110.9,
+     "k": "Flour, High Gluten"
+    },
+    {
+     "item": "Spice, Kosher Salt",
+     "qty": "1 x Case/12/3LB",
+     "price": 51.45,
+     "total": 51.45,
+     "k": "Spice, Kosher Salt"
+    },
+    {
+     "item": "Broccoli, Florets",
+     "qty": "1 x 3LB",
+     "price": 10.59,
+     "total": 10.59,
+     "k": "Broccoli, Florets"
+    },
+    {
+     "item": "Mushrooms, Sliced",
+     "qty": "1 x Case/1/10LB",
+     "price": 26.99,
+     "total": 26.99,
+     "k": "Mushrooms, Sliced"
+    },
+    {
+     "item": "Peppers, Green",
+     "qty": "1 x Case",
+     "price": 39.49,
+     "total": 39.49,
+     "k": "Peppers, Green"
+    }
+   ]
+  },
   {
    "d": "2026-11-19",
    "v": "The Odom Corporation",
