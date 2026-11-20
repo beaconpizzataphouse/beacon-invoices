@@ -1,6 +1,31 @@
 {
- "generated": "2026-11-17",
+ "generated": "2026-11-19",
  "invoices": [
+  {
+   "d": "2026-11-19",
+   "v": "The Odom Corporation",
+   "n": "13201422",
+   "t": 406.0,
+   "s": "Photo",
+   "it": 406.0,
+   "tx": 0.0,
+   "lines": [
+    {
+     "item": "Coors Light Keg (1/2BBL)",
+     "qty": "2 x Keg",
+     "price": 158.0,
+     "total": 316.0,
+     "k": "Coors Light Keg (1/2BBL)"
+    },
+    {
+     "item": "Keg Deposit - At Purchase ($45)",
+     "qty": "2 x Each",
+     "price": 45.0,
+     "total": 90.0,
+     "k": "Keg Deposit - At Purchase $45"
+    }
+   ]
+  },
   {
    "d": "2026-11-17",
    "v": "Costco Wholesale",
