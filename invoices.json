@@ -1,6 +1,110 @@
 {
- "generated": "2026-11-20",
+ "generated": "2026-11-25",
  "invoices": [
+  {
+   "d": "2026-11-23",
+   "v": "US Foods",
+   "n": "4122208",
+   "t": 942.78,
+   "s": "Photo",
+   "it": 931.78,
+   "tx": 0.0,
+   "dl": 13.0,
+   "cr": -2.0,
+   "lines": [
+    {
+     "item": "Pineapple, Tidbits",
+     "qty": "1 x Case/6/#10 CN",
+     "price": 73.95,
+     "total": 73.95,
+     "k": "Pineapple, Tidbits"
+    },
+    {
+     "item": "Pasta, Spaghetti",
+     "qty": "1 x Case/2/10LB",
+     "price": 42.56,
+     "total": 42.56,
+     "k": "Pasta, Spaghetti"
+    },
+    {
+     "item": "Sauce, Pizza (Full Red)",
+     "qty": "2 x Case/6/#10 CN",
+     "price": 45.14,
+     "total": 90.28,
+     "k": "Sauce, Pizza"
+    },
+    {
+     "item": "Pasta, Angel Hair",
+     "qty": "1 x Case/2/10LB",
+     "price": 40.87,
+     "total": 40.87,
+     "k": "Pasta, Angel Hair"
+    },
+    {
+     "item": "Peppers, Jalapeno Sliced",
+     "qty": "1 x Case/6/#10 CN",
+     "price": 67.84,
+     "total": 67.84,
+     "k": "Peppers, Jalapeno Sliced"
+    },
+    {
+     "item": "Sauce, Pizza (Pizzaiolo)",
+     "qty": "2 x Case/6/#10 CN",
+     "price": 49.67,
+     "total": 99.34,
+     "k": "Sauce, Pizza"
+    },
+    {
+     "item": "Sauce, BBQ",
+     "qty": "1 x Case/4/1GA",
+     "price": 69.71,
+     "total": 69.71,
+     "k": "Sauce, BBQ"
+    },
+    {
+     "item": "Onions, Green",
+     "qty": "1 x EA",
+     "price": 6.8,
+     "total": 6.8,
+     "k": "Onions, Green"
+    },
+    {
+     "item": "Bacon, Canadian",
+     "qty": "3 x Case/4/2.5LB",
+     "price": 47.76,
+     "total": 143.28,
+     "k": "Bacon, Canadian"
+    },
+    {
+     "item": "Tomatoes, Roma",
+     "qty": "1 x Case/25LB",
+     "price": 54.8,
+     "total": 54.8,
+     "k": "Tomatoes, Roma"
+    },
+    {
+     "item": "Cheese, Parmesan Shaved",
+     "qty": "1 x Case/2/3LB",
+     "price": 41.9,
+     "total": 41.9,
+     "k": "Cheese, Parmesan Shaved"
+    },
+    {
+     "item": "Breadstick, White",
+     "qty": "1 x Case/8/16/1.7OZ",
+     "price": 41.78,
+     "total": 41.78,
+     "k": "Breadstick, White"
+    },
+    {
+     "item": "Chicken, Breast Strips",
+     "qty": "3 x Case/10LB",
+     "price": 52.89,
+     "total": 158.67,
+     "k": "Chicken, Breast Strips"
+    }
+   ]
+  },
   {
    "d": "2026-11-20",
    "v": "Sysco",
