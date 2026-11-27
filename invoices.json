@@ -1,6 +1,68 @@
 {
- "generated": "2026-11-25",
+ "generated": "2026-11-27",
  "invoices": [
+  {
+   "d": "2026-11-27",
+   "v": "Sysco",
+   "n": "321535042",
+   "t": 775.66,
+   "s": "Photo",
+   "it": 765.66,
+   "tx": 0.0,
+   "dl": 10.0,
+   "cr": 0.0,
+   "lines": [
+    {
+     "item": "Provolone Cheese",
+     "qty": "1 x Case/6/2.5LB",
+     "price": 54.69,
+     "total": 54.69,
+     "k": "Cheese, Provolone Sliced"
+    },
+    {
+     "item": "Pepperoni",
+     "qty": "5 x Case/1/10LB",
+     "price": 42.77,
+     "total": 213.85,
+     "k": "Pepperoni, Sliced"
+    },
+    {
+     "item": "Sausage",
+     "qty": "5 x Case/2/5LB",
+     "price": 38.35,
+     "total": 191.75,
+     "k": "Sausage, Pizza Topping"
+    },
+    {
+     "item": "Caeser",
+     "qty": "1 x Gallon",
+     "price": 32.79,
+     "total": 32.79,
+     "k": "Dressing, Caesar"
+    },
+    {
+     "item": "Flour",
+     "qty": "20 x Case/1/25LB",
+     "price": 10.63,
+     "total": 212.6,
+     "k": "Flour, High Gluten"
+    },
+    {
+     "item": "Mushrooms",
+     "qty": "1 x Case/1/10LB",
+     "price": 26.99,
+     "total": 26.99,
+     "k": "Mushrooms, Sliced"
+    },
+    {
+     "item": "Lettuce, Romaine Baby",
+     "qty": "1 x Case/1/48CT",
+     "price": 32.99,
+     "total": 32.99,
+     "k": "Lettuce, Romaine Baby"
+    }
+   ]
+  },
   {
    "d": "2026-11-25",
    "v": "Pepsi Beverages Company",
